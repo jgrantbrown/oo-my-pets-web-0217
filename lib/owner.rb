@@ -1,16 +1,15 @@
 require 'pry'
 class Owner
-  attr_reader :species
-  attr_accessor :name, :pets, :mood
 
+attr_reader :species
+attr_accessor :fish, :cat, :dog, :name, :pets
 @@all=[]
-@@count=0
-  def initialize(name,species="human")
+
+  def initialize(species)
+    @pets={:fishes => [], :dogs => [], :cats => []}
     @name=name
-    @species = species
-    @pets = {:fishes => [], :dogs => [], :cats => []}
+    @species=species
     @@all<<self
-    @@count+=1
   end
 
   def self.all
@@ -18,77 +17,51 @@ class Owner
   end
 
   def self.reset_all
-    @@all.clear
-    @@count=0
-  end
-
-  def self.count
-    @@count
+    @@all=[]
   end
 
   def say_species
-    "I am a #{self.species}."
+    "I am a #{species}."
   end
 
-  def buy_fish(fish_name)
-    # new_fish = Fish.new(fish_name)
-    # self.pets[:fishes] << new_fish
-    self.pets[:fishes] << Fish.new(fish_name)
-
+  def self.count
+    @@all.length
   end
 
-  def buy_cat(cat_name)
-    # new_fish = Fish.new(fish_name)
-    # self.pets[:fishes] << new_fish
-    self.pets[:cats] << Cat.new(cat_name)
+  def buy_fish(name)
+    pets[:fishes] << Fish.new(name)
   end
 
-  def buy_dog(dog_name)
-    # new_fish = Fish.new(fish_name)
-    # self.pets[:fishes] << new_fish
-    self.pets[:dogs] << Dog.new(dog_name)
+  def buy_cat(name)
+    pets[:cats] << Cat.new(name)
+  end
+
+  def buy_dog(name)
+    pets[:dogs]<<Dog.new(name)
   end
 
   def walk_dogs
-    self.pets[:dogs].map do |dog_object|
-
-      dog_object.mood="happy"
-    end
+    self.pets[:dogs].each{|x| x.mood="happy"}
   end
 
   def play_with_cats
-    self.pets[:cats].map do |cat_object|
-
-      cat_object.mood="happy"
-    end
+    self.pets[:cats].each{|x| x.mood="happy"}
   end
 
   def feed_fish
-    self.pets[:fishes].map do |fish_object|
-
-      fish_object.mood="happy"
-    end
+    self.pets[:fishes].each{|x| x.mood="happy"}
   end
 
   def sell_pets
-    self.pets.map do | pet_type, pet_data_array|
-      pet_data_array.map do | pet_object|
-        pet_object.mood="nervous"
-      end
+    self.pets.map do |pet_type,pet_array|
+    pet_array.map {|pet| pet.mood="nervous"}
     end
-    clear_pet_array
-  end
-
-  def clear_pet_array
-    self.pets.map do |pet_type, pet_data_array|
-      pet_data_array.clear
-    end
+    @pets={:fishes => [], :dogs => [], :cats => []}
   end
 
   def list_pets
 
-      "I have #{self.pets[:fishes].count} fish, #{self.pets[:dogs].count} dog(s), and #{self.pets[:cats].count} cat(s)."
-
+    "I have #{pets[:fishes].length} fish, #{pets[:dogs].length} dog(s), and #{pets[:cats].length} cat(s)."
   end
 
 end
